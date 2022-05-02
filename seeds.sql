@@ -4,11 +4,11 @@ VALUES  ("Sales"),
         ("Finance"),
         ("Engineering");
         
-INSERT INTO roles (title, salary)
-VALUES  ("Engineer", "100000"),
-        ("Sales", "90000"),
-        ("Account", "80000"),
-        ("Legal", "70000");
+INSERT INTO roles (title, salary, department_id)
+VALUES  ("Engineer", "100000",4),
+        ("Sales", "90000",1),
+        ("Account", "80000",3),
+        ("Legal", "70000",2);
         
        
 INSERT INTO employee (first_name, last_name)
