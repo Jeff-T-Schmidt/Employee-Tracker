@@ -13,7 +13,7 @@ WHERE roles.department_id = department.id;
 
 SELECT * 
 FROM roles 
-LEFT JOIN department 
+JOIN department 
 WHERE roles.department_id = department.id;
 
 SELECT first_name, last_name FROM employee;
@@ -21,3 +21,12 @@ SELECT first_name, last_name FROM employee;
 UPDATE employee
 SET role_id = 3
 WHERE first_name = "Jeff";
+
+SELECT * 
+FROM employee 
+JOIN roles
+WHERE employee.role_id = roles.id;
+
+SELECT id
+FROM roles
+WHERE title = ?;

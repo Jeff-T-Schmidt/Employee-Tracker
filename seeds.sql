@@ -11,10 +11,10 @@ VALUES  ("Engineer", "100000",4),
         ("Legal", "70000",2);
         
        
-INSERT INTO employee (first_name, last_name)
-VALUES  ("Jeff", "Schmidt"),
-        ("Tosh", "Smith"),
-        ("Brenda", "Johnson"),
-        ("Sarah", "Connor"),
-        ("Ashley", "Mcguile"),
-        ("Mike", "Jones");
+INSERT INTO employee (first_name, last_name, role_id, manager_id)
+VALUES  ("Jeff", "Schmidt", 4, null),
+        ("Tosh", "Smith", 1, 1),
+        ("Brenda", "Johnson", 3, 1),
+        ("Sarah", "Connor", 1, null),
+        ("Ashley", "Mcguile", 4, null),
+        ("Mike", "Jones", 2, null);

@@ -20,10 +20,13 @@ const ask = () => {
             type: "list",
             message: "What would you like to do?",
             name: "selection",
-            choices: ["Add Employee", "Update Employee role", "View All roles", "Add Role", "View All Departments", "Add Departments", "Quit"]
+            choices: ["View all employees","Add Employee", "Update Employee role", "View All roles", "Add Role", "View All Departments", "Add Departments", "Quit"]
         },
     ]).then(ans => {
         switch (ans.selection) {
+            case "View all employees":
+                viewAllemployee()
+                break;
             case "Add Employee":
                 addEmployee()
                 break;
@@ -49,6 +52,18 @@ const ask = () => {
                 break;
         }
     })
+    const viewAllemployee = () => {
+        db.query(`SELECT * FROM employee JOIN roles WHERE employee.role_id = roles.id;`, (err, result) => {
+            if (err) {
+                console.log(err);
+            }
+            console.log("\n");
+            console.table(result);
+        })
+
+        ask()
+
+    }
     const addEmployee = () => {
         inquirer.prompt([
             {
@@ -80,7 +95,7 @@ const ask = () => {
             const last = ans.lastName
             const role = ans.role
             const manager = ans.manager
-
+            // pull the list of the employees, select the employees from a list, once you have the employee name pull the ID from a query string then add them. 
             db.query(`INSERT INTO employee(first_name)
             VALUE ("${first}")`, (err, result) => {
                 if (err) {
@@ -145,7 +160,7 @@ const ask = () => {
             //         console.log(err);
             //     }
             // })
-            console.log("Updated employee's role!") 
+            console.log("Updated employee's role!")
             ask();
         })
     }
@@ -154,15 +169,14 @@ const ask = () => {
             if (err) {
                 console.log(err);
             }
+            console.log("\n");
             console.table(result);
-            //not showing data because sql keeps returning an empty set
-            //but I do think this is the correct SELECT statement
         })
-
         ask()
-
     }
     const addRole = () => {
+        // run a query that pulls a title of exsisting department == do the same thing here with the promises for existing roles. SELECT name FROM department.
+
         inquirer.prompt([
             {
                 type: "input",
@@ -181,31 +195,45 @@ const ask = () => {
                 choices: ["Finance", "Legal", "Sales", "Engineering"]
                 //I'm guessing this needs to be slected from the database somehow?
             },
-        ]).then(ans => {
-            const newRole = ans.roleName
-            const salary = ans.salary
-            const department = ans.department
-            console.log(newRole + " has been added!")
-            db.query(`INSERT INTO roles(title)
-            VALUE ("${newRole}")`, (err, result) => {
+        ]).then(async function(ans) {
+            // Run a query that selects the id from roles where there title = their selection. (set to a variable)
+            // const roleName = (ans) => {
+            //     return new Promise((resolve, reject) => {
+            //         db.query(`SELECT id FROM roles WHERE title = ?;`, ans.roleName, (err, data)=>{
+            //             if (err) {
+            //                 reject(err);
+            //             } else {
+            //                 console.log(data[0])
+            //                 resolve(data[0].id)
+            //             }
+            //         })
+            //     })
+            // } 
+            // const somethingRole = await roleName(ans);
+
+            const departmentID = (ans) => {
+                return new Promise((resolve, reject) => {
+                    db.query(`SELECT id FROM department WHERE name = ?`, ans.department, (err, data) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            console.log(data[0])
+                            resolve(data[0].id)
+                        }
+                    })
+                })
+            }
+            const department = await departmentID(ans);
+
+            console.log(department)
+            db.query(`INSERT INTO roles(title, salary, department_id) VALUES (?,?,?)`, [ans.roleName, ans.salary, department], (err, data) => {
                 if (err) {
                     console.log(err);
-                }
 
-            })
-            db.query(`INSERT INTO roles(salary)
-            VALUE ("${salary}")`, (err, result) => {
-                if (err) {
-                    console.log(err);
-                }
+                } else {
+                    console.log("Role added!")
 
-            })
-            db.query(`INSERT INTO roles(department_id)
-            VALUE ("${department}")`, (err, result) => {
-                if (err) {
-                    console.log(err);
                 }
-
             })
             ask()
 
