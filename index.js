@@ -196,10 +196,13 @@ const ask = () => {
                 //I'm guessing this needs to be slected from the database somehow?
             },
         ]).then(async function(ans) {
+            // db.query(`SELECT department.name, department.id FROM department`).then(function(res){}) -----Not even kidding, this ONE line of code took my tutor 40 minutes to "help" me with. Just this line, line 199...
+
+
             // Run a query that selects the id from roles where there title = their selection. (set to a variable)
             // const roleName = (ans) => {
             //     return new Promise((resolve, reject) => {
-            //         db.query(`SELECT id FROM roles WHERE title = ?;`, ans.roleName, (err, data)=>{
+            //         db.query(`INSERT INTO roles SET ?;`, ans.roleName, (err, data)=>{
             //             if (err) {
             //                 reject(err);
             //             } else {
